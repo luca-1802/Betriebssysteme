@@ -9,7 +9,7 @@ ls -ltr
 
 3. Kopiere rekursiv alle Dateien mit der Endung ".doc" in den Ordner "/tmp".
 
-find . -type f -name "*.doc" -exec cp {} C://Users/lucah/Desktop/tmp/ \;
+find . -type f -name "*.doc" -exec cp {} /tmp/ \;
 
 4. Definiere ein Kommando "gifhunter", welches rekursiv alle Dateien mit der Endung ".gif" sucht und auflistet.
 
