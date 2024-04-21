@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Verwendung: gifhunter <verzeichnis>"
+    exit 1
+fi
+
+# Verzeichnis, in dem nach .gif-Dateien gesucht werden soll
+directory="$1"
+
+# Suche rekursiv nach .gif-Dateien im angegebenen Verzeichnis
+find "$directory" -type f -name "*.gif"

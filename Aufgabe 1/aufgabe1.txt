@@ -1,0 +1,47 @@
+1. Finde rekursiv alle Ordner, deren Name die Buchstaben "Do" enthält.
+
+find -type d -iname "*Do*"
+
+2.
+Zeige eine Liste von Dateien im aktuellen Ordner, wobei die neueste Datei ganz unten steht.
+
+ls -ltr
+
+3. Kopiere rekursiv alle Dateien mit der Endung ".doc" in den Ordner "/tmp".
+
+find . -type f -name "*.doc" -exec cp {} C://Users/lucah/Desktop/tmp/ \;
+
+4. Definiere ein Kommando "gifhunter", welches rekursiv alle Dateien mit der Endung ".gif" sucht und auflistet.
+
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Verwendung: gifhunter <verzeichnis>"
+    exit 1
+fi
+
+# Verzeichnis, in dem nach .gif-Dateien gesucht werden soll
+directory="$1"
+
+# Suche rekursiv nach .gif-Dateien im angegebenen Verzeichnis
+find "$directory" -type f -name "*.gif"
+
+zum ausführen!
+chmod +x gifhunter
+gifhunter .
+
+5. Ermittle wie oft jeder Dateiname im aktuellen Verzeichnis vorkommt.
+
+find . -maxdepth 1 -type f -printf '%f\n' | sort | uniq -c | awk '{print $2 ": " $1}'
+
+6. Ermittle die Anzahl der Worte in einer Textdatei.
+
+wc -w dateiname
+
+7. Gebe den aktuell genutzten Festplattenplatz mit "df" auf dem Bildschirm aus, und schreibe dies gleichzeitig (!) in eine Datei "stats.txt".
+
+df -h | tee stats.txt
+
+8. Gib die Dateien im aktuellen Verzeichnis aus, sortiert nach ihrer Größe.
+
+ls -lS
