@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Eine Funktion für farbigen Output
+# Eine Funktion für den Output
 output() {
-    printf "\e[1;34m$1\e[1;0m\n$2\n\n"
+    printf "$1\n$2\n\n"
 }
 
 # Alle übergebenen Kommandozeilenargumente
