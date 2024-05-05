@@ -13,8 +13,8 @@ directory=$1
 for file in "$directory"/*; do
 	# Überprüfen, ob es sich um eine Datei handelt
 	if [ -f "$file" ]; then
-        # Den Dateityp ermitteln
-        filetype=$(file -b "$file")
-        echo "$file: $filetype"
+        	# Den Dateityp ermitteln
+        	filetype=$(file -b "$file")
+        	echo "$file: $filetype"
 	fi
 done
