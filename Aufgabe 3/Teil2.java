@@ -1,13 +1,14 @@
 import java.util.ArrayList;
 
 public class Teil2 {
-
     public static void main(String[] args) {
+        // Check if there are exactly 3 inputs
         if (args.length != 3) {
             System.out.println("Verwendung: java Teil1.java <min> <max> <numthreads>");
             return;
         }
 
+        // Parse input arguments into integers
         int min, max, numthreads;
         try {
             min = Integer.parseInt(args[0]);
@@ -23,6 +24,7 @@ public class Teil2 {
         Task[] tasks = new Task[numthreads];
         Thread[] threads = new Thread[numthreads];
 
+        // Create and start each threat with given min and max
         for (int i = 0; i < numthreads; i++) {
             int start = min + i * threadBlockSize;
             int end = (i == numthreads - 1) ? max : start + threadBlockSize - 1;
@@ -31,6 +33,7 @@ public class Teil2 {
             threads[i].start();
         }
 
+        // Wait for all threads to complete
         for (Thread thread : threads) {
             try {
                 thread.join();
@@ -39,11 +42,13 @@ public class Teil2 {
             }
         }
         
+        // Combine the results
         ArrayList<Integer> primeNumbers = new ArrayList<>();
         for (Task task : tasks) {
             primeNumbers.addAll(task.getResult());
         }
     
+        // Display the final result
         System.out.println("Prime numbers of numbers from " + min + " to " + max + ": " + primeNumbers);
     }
 }
@@ -53,11 +58,20 @@ class Task implements Runnable {
     private final int end;
     public ArrayList<Integer> result = new ArrayList<>();
 
+    /**
+     * Constructs a new Task with the specified range.
+     *
+     * @param start The starting number.
+     * @param end   The ending number.
+     */
     public Task(int start, int end) {
         this.start = start;
         this.end = end;
     }
 
+    /**
+     * Executes the task by checking if the numbers within the assigned range are prime numbers.
+     */
     @Override
     public void run() {
         for (int i = start; i <= end; i++) {
@@ -77,6 +91,11 @@ class Task implements Runnable {
         }
     }
 
+    /**
+     * Retrieves the result of this task.
+     *
+     * @return The ArrayList of numbers within the assigned range.
+     */
     public ArrayList<Integer> getResult() {
         return result;
     }
