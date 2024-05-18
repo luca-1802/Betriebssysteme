@@ -1,6 +1,13 @@
 import java.util.ArrayList;
+import java.util.TreeSet;
+import java.util.concurrent.Semaphore;
 
 public class Teil2 {
+    // Global TreeSet
+    public static final TreeSet<Integer> primeNumbers = new TreeSet<>();
+    // Semaphore for synchronizing access
+    public static final Semaphore semaphore = new Semaphore(1);
+
     public static void main(String[] args) {
         // Check if there are exactly 3 inputs
         if (args.length != 3) {
@@ -24,7 +31,7 @@ public class Teil2 {
         Task[] tasks = new Task[numthreads];
         Thread[] threads = new Thread[numthreads];
 
-        // Create and start each threat with given min and max
+        // Create and start each thread with given min and max
         for (int i = 0; i < numthreads; i++) {
             int start = min + i * threadBlockSize;
             int end = (i == numthreads - 1) ? max : start + threadBlockSize - 1;
@@ -41,22 +48,15 @@ public class Teil2 {
                 e.printStackTrace();
             }
         }
-        
-        // Combine the results
-        ArrayList<Integer> primeNumbers = new ArrayList<>();
-        for (Task task : tasks) {
-            primeNumbers.addAll(task.getResult());
-        }
-    
+
         // Display the final result
-        System.out.println("Prime numbers of numbers from " + min + " to " + max + ": " + primeNumbers);
+        System.out.println("Prime numbers from " + min + " to " + max + ": " + primeNumbers);
     }
 }
 
 class Task implements Runnable {
     private final int start;
     private final int end;
-    public ArrayList<Integer> result = new ArrayList<>();
 
     /**
      * Constructs a new Task with the specified range.
@@ -70,33 +70,33 @@ class Task implements Runnable {
     }
 
     /**
-     * Executes the task by checking if the numbers within the assigned range are prime numbers.
+     * Executes the task by checking if the numbers within the assigned range are
+     * prime numbers.
      */
     @Override
     public void run() {
         for (int i = start; i <= end; i++) {
             if (i <= 1)
                 continue;
-            
-                boolean isprime = true;
-            for (int j = 2; j*j <= i; j++) {
+
+            boolean isPrime = true;
+            for (int j = 2; j * j <= i; j++) {
                 if (i % j == 0) {
-                    isprime = false;
+                    isPrime = false;
                     break;
                 }
             }
-            
-            if (isprime)
-                result.add(i);
-        }
-    }
 
-    /**
-     * Retrieves the result of this task.
-     *
-     * @return The ArrayList of numbers within the assigned range.
-     */
-    public ArrayList<Integer> getResult() {
-        return result;
+            if (isPrime) {
+                try {
+                    Teil2.semaphore.acquire();
+                    Teil2.primeNumbers.add(i);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    Teil2.semaphore.release();
+                }
+            }
+        }
     }
 }
