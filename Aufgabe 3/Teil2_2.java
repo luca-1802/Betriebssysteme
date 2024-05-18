@@ -9,7 +9,7 @@ public class Teil2 {
 	public static void main(String[] args) {
 		
 		if (args.length != 3) {
-			System.out.println("Kommandozeilenargumente nicht vollst‰ndig");
+			System.out.println("Kommandozeilenargumente nicht vollst√§ndig");
 			return;
 		}
 
