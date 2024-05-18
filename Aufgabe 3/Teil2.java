@@ -1,102 +1,80 @@
-import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
 
-public class Teil2 {
-    // Global TreeSet
+public class Teil2 {	
+	
     public static final TreeSet<Integer> primeNumbers = new TreeSet<>();
-    // Semaphore for synchronizing access
     public static final Semaphore semaphore = new Semaphore(1);
+    
+	public static void main(String[] args) {
+		
+		if (args.length != 3) {
+			System.out.println("Kommandozeilenargumente nicht vollständig");
+			return;
+		}
 
-    public static void main(String[] args) {
-        // Check if there are exactly 3 inputs
-        if (args.length != 3) {
-            System.out.println("Verwendung: java Teil1.java <min> <max> <numthreads>");
-            return;
-        }
-
-        // Parse input arguments into integers
-        int min, max, numthreads;
-        try {
-            min = Integer.parseInt(args[0]);
-            max = Integer.parseInt(args[1]);
-            numthreads = Integer.parseInt(args[2]);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid integer input!");
-            return;
-        }
-
-        int threadBlockSize = (max - min) / numthreads;
-
-        Task[] tasks = new Task[numthreads];
-        Thread[] threads = new Thread[numthreads];
-
-        // Create and start each thread with given min and max
+		int start = Integer.parseInt(args[0]);
+		int end = Integer.parseInt(args[1]);
+		int numthreads = Integer.parseInt(args[2]);
+		
+		// Bestimmung Zahlenbereich:
+		int[] ranges = new int[numthreads + 1];
+        int thread_block_size = (end - start + 1) / numthreads;
         for (int i = 0; i < numthreads; i++) {
-            int start = min + i * threadBlockSize;
-            int end = (i == numthreads - 1) ? max : start + threadBlockSize - 1;
-            tasks[i] = new Task(start, end);
-            threads[i] = new Thread(tasks[i]);
-            threads[i].start();
+            ranges[i] = start + i * thread_block_size;
         }
-
-        // Wait for all threads to complete
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Display the final result
-        System.out.println("Prime numbers from " + min + " to " + max + ": " + primeNumbers);
-    }
+        ranges[numthreads] = end + 1;
+        
+        // Threads starten:
+		Thread[] thread = new Thread[numthreads];
+		Counter2[] counter = new Counter2[numthreads];
+		for (int i = 0; i < numthreads; i++) {
+			counter[i] = new Counter2(ranges[i], ranges[i + 1]);
+			thread[i] = new Thread(counter[i]);
+			thread[i].start();
+		}
+		
+		// auf Threads warten:
+		for (int i = 0; i < numthreads; i++) {
+			try {
+				thread[i].join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("gefundene Primzahlen: " + primeNumbers);
+	}
 }
 
-class Task implements Runnable {
-    private final int start;
-    private final int end;
-
-    /**
-     * Constructs a new Task with the specified range.
-     *
-     * @param start The starting number.
-     * @param end   The ending number.
-     */
-    public Task(int start, int end) {
-        this.start = start;
-        this.end = end;
-    }
-
-    /**
-     * Executes the task by checking if the numbers within the assigned range are
-     * prime numbers.
-     */
-    @Override
-    public void run() {
-        for (int i = start; i <= end; i++) {
-            if (i <= 1)
-                continue;
-
-            boolean isPrime = true;
-            for (int j = 2; j * j <= i; j++) {
-                if (i % j == 0) {
-                    isPrime = false;
-                    break;
-                }
-            }
-
-            if (isPrime) {
-                try {
+class Counter2 implements Runnable{
+	
+	protected int start, end;
+	
+	public Counter2(int start, int end) {
+		this.start = start;
+		this.end = end;
+	}
+	
+	@Override
+	public void run() {
+		for (int i = start; i <= end; i++) {
+			if(isPrime(i)) {
+				try {
                     Teil2.semaphore.acquire();
                     Teil2.primeNumbers.add(i);
+                    Teil2.semaphore.release();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                } finally {
-                    Teil2.semaphore.release();
                 }
-            }
+			}			
+		}
+	}
+	
+	protected boolean isPrime(int number) {
+        if (number <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i == 0) return false;
         }
+        return true;
     }
 }
