@@ -53,7 +53,7 @@ public class Teil2 {
         long time = endTime - startTime;
         double convertedTime = (double) time / 1000000000.0;
         // Display the final result
-        System.out.println("Time: " + convertedTime + " seconds");
+        System.out.println("Time: " + String.format("%.7f", convertedTime) + " seconds");
         System.out.println("Prime numbers from " + min + " to " + max + ": " + primeNumbers);
     }
 }
