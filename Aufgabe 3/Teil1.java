@@ -1,5 +1,6 @@
 public class Teil1 {
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
         // Check if there are exactly 3 inputs
         if (args.length != 3) {
             System.out.println("Verwendung: java Teil1.java <min> <max> <numthreads>");
@@ -46,7 +47,11 @@ public class Teil1 {
             result += task.getResult();
         }
 
+        long endTime = System.nanoTime();
+        long time = endTime - startTime;
+        double convertedTime = (double) time / 1000000000.0;
         // Display the final result
+        System.out.println("Time: " + convertedTime + " seconds");
         System.out.println("Sum of numbers from " + min + " to " + max + ": " + result);
     }
 }
@@ -68,7 +73,8 @@ class Task implements Runnable {
     }
 
     /**
-     * Executes the task by adding the numbers to the result within the assigned range.
+     * Executes the task by adding the numbers to the result within the assigned
+     * range.
      */
     @Override
     public void run() {

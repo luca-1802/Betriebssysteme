@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.concurrent.Semaphore;
 
@@ -9,6 +8,7 @@ public class Teil2 {
     public static final Semaphore semaphore = new Semaphore(1);
 
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
         // Check if there are exactly 3 inputs
         if (args.length != 3) {
             System.out.println("Verwendung: java Teil1.java <min> <max> <numthreads>");
@@ -49,7 +49,11 @@ public class Teil2 {
             }
         }
 
+        long endTime = System.nanoTime();
+        long time = endTime - startTime;
+        double convertedTime = (double) time / 1000000000.0;
         // Display the final result
+        System.out.println("Time: " + convertedTime + " seconds");
         System.out.println("Prime numbers from " + min + " to " + max + ": " + primeNumbers);
     }
 }
