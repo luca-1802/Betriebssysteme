@@ -1,0 +1,26 @@
+Teil1:
+
+1 Thread:
+C:\Users\lucah\Desktop\Betriebssysteme\Aufgabe 3>java Teil1.java 1 1000 1
+Time: 0,0002201 seconds
+Sum of numbers from 1 to 1000: 500500
+
+Anzahl Threads = Anzahl Cores:
+C:\Users\lucah\Desktop\Betriebssysteme\Aufgabe 3>java Teil1.java 1 1000 24
+Time: 0,0008833 seconds
+Sum of numbers from 1 to 1000: 500500
+
+Anzahl Threads > Anzahl Cores:
+C:\Users\lucah\Desktop\Betriebssysteme\Aufgabe 3>java Teil1.java 1 1000 32
+Time: 0,0012633 seconds
+Sum of numbers from 1 to 1000: 500500
+
+kleiner Zahlenbereich:
+C:\Users\lucah\Desktop\Betriebssysteme\Aufgabe 3>java Teil1.java 1 100 1
+Time: 0,0002259 seconds
+Sum of numbers from 1 to 100: 5050
+
+rieisger Zahlenbereich:
+C:\Users\lucah\Desktop\Betriebssysteme\Aufgabe 3>java Teil1.java 1 1000000 1
+Time: 0,0014687 seconds
+Sum of numbers from 1 to 1000000: 1784293664
