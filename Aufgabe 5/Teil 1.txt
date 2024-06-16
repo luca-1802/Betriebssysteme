@@ -1,0 +1,25 @@
+Teil 1:
+
+1. Wo wird die Gesamtmenge des physischen Hauptspeichers angezeigt?
+- vmstat -a 1: nicht direkt: addition von free, buff, cache, inact, active
+- free: Zeile Mem, Spalte total
+- top: bei Mem unter total
+- cat /proc/meminfo: Zeile MemTotal
+
+2. Wo wird die Menge des von Prozessen benutzten Hauptspeichers angezeigt?
+- vmstat -a 1: nicht direkt: total memore - free memory - buff - cache berechnen (inact, active berücksichtigen)
+- free: Zeile Mem, Spalte used
+- top: Bei Mem unter used
+- cat /proc/meminfo: nicht direkt -> MemTotal - MemFree - Buffers - Cached berechnen
+
+3. Wo wird die Menge des noch verfügbaren Hauptspeichers angezeigt?
+- vmstat -a 1: nicht direkt: free, buff, cache addieren
+- free: Zeile Mem, Spalte available
+- top: bei avail Mem
+- cat /proc/meminfo: Zeile MemAvailable
+
+htop:
+Was bedeutet die Ausgabe in der Zeile "Mem" bei diesem Programm?
+- zeigt eine Zusammenfassung der Speicherauslastung des Systems mithilfe eines Balkendiagramms
+Unterschied:
+- Keine Berechnung bei htop nötig sowie mit free, top. vmstat -a 1 und cat /proc/meminfo benötigen Berechnung. Zudem hat htop eine grafische Darstellung für eine leichte Interpretation
